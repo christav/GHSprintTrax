@@ -53,6 +53,8 @@ namespace GHSprintTrax.GithubApi.EntityImplementations
             };
 
             message.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(Constants.apiMimeType));
+            message.Headers.UserAgent.Add(new ProductInfoHeaderValue("GetSprintStatus", "0.1"));
+
             return message;
         }
 
