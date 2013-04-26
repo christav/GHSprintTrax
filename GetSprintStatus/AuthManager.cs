@@ -12,7 +12,11 @@ namespace GetSprintStatus
         {
             Credentials.Credentials credentials = credentialProvider.GetCredentials();
 
-            var authService = new AuthorizationService(credentials.Username, credentials.Password);
+            var authService = new AuthorizationService(credentials.Username, credentials.Password)
+            {
+                UserAgent = Program.UserAgent,
+                AgentVersion = Program.AgentVersion
+            };
 
             return GetAuthorization(authService);
         }

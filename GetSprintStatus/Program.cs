@@ -12,6 +12,9 @@ namespace GetSprintStatus
 {
     internal class Program
     {
+        internal const string UserAgent = "GetSprintStatus";
+        internal const string AgentVersion = "0.1";
+
         private GithubService github;
 
         private readonly List<Tuple<string, string>> repoNames;
@@ -23,8 +26,8 @@ namespace GetSprintStatus
             this.stats = stats;
             this.repoNames = new List<Tuple<string, string>>(repoNames);
 
-            connectToGithub();
-            createFormatters(listErrors);
+            ConnectToGithub();
+            CreateFormatters(listErrors);
         }
 
         private void Go()
@@ -33,17 +36,17 @@ namespace GetSprintStatus
             ShowResults();
         }
 
-        private void connectToGithub()
+        private void ConnectToGithub()
         {
             var credentialProvider = new CompositeCredentialProvider()
                 .Add(new GitCredentialProvider("github.com"))
                 .Add(new AskUserCredentialProvider());
 
             var authorization = AuthManager.GetAuthorization(credentialProvider);
-            github = new GithubService(authorization);
+            github = new GithubService(authorization) {UserAgent = UserAgent, AgentVersion = AgentVersion};
         }
 
-        private void createFormatters(bool listErrors)
+        private void CreateFormatters(bool listErrors)
         {
             formatters = new List<IFormatter>
             {
@@ -119,7 +122,7 @@ namespace GetSprintStatus
             if (extraParams.Count == 2)
             {
                 // owner/repo on command line
-                return new List<Tuple<string, string>>() {Tuple.Create(extraParams[0], extraParams[1])};
+                return new List<Tuple<string, string>> {Tuple.Create(extraParams[0], extraParams[1])};
             }
            
             if (extraParams.Count == 1)
