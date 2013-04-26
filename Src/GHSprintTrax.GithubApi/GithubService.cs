@@ -2,9 +2,12 @@
 using GHSprintTrax.GithubApi.EntityImplementations;
 using GHSprintTrax.GithubApi.MessageHandlers;
 using GHSprintTrax.GithubApi.SerializationTypes;
+using System.Linq;
+using System.Net.Http.Headers;
 
 namespace GHSprintTrax.GithubApi
 {
+
     public class GithubService : EntityImplementation
     {
         public GithubService(Authorization authorization, string rootUri = Constants.GithubUri)

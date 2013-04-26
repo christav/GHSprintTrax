@@ -15,6 +15,18 @@ namespace GHSprintTrax.GithubApi
                 Constants.GithubUri);
         }
 
+        public string UserAgent
+        {
+            get { return impl.UserAgent; }
+            set { impl.UserAgent = value; }
+        }
+
+        public string AgentVersion
+        {
+            get { return impl.AgentVersion; }
+            set { impl.AgentVersion = value; }
+        }
+
         #region IAuthorizationAPI Members
 
         public Authorization CreateAuthorization(string note = null, string noteUri = null,

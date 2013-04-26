@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -13,6 +12,9 @@ namespace GHSprintTrax.GithubApi.EntityImplementations
 {
     public abstract class EntityImplementation
     {
+        public const string DefaultUserAgent = "GHSprintTraxApi";
+        public const string DefaultAgentVersion = "0.1";
+ 
         private readonly HttpClient client;
         private readonly string rootUri;
 
@@ -20,6 +22,7 @@ namespace GHSprintTrax.GithubApi.EntityImplementations
         {
             this.client = client;
             this.rootUri = rootUri;
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(DefaultUserAgent, DefaultAgentVersion));
         }
 
         protected HttpClient Client
@@ -30,6 +33,28 @@ namespace GHSprintTrax.GithubApi.EntityImplementations
         protected string RootUri
         {
             get { return rootUri; }
+        }
+
+        public string UserAgent
+        {
+            get { return Client.DefaultRequestHeaders.UserAgent.First().Product.Name; }
+            set
+            {
+                var currentVersion = Client.DefaultRequestHeaders.UserAgent.First().Product.Version;
+                Client.DefaultRequestHeaders.UserAgent.Clear();
+                Client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(value, currentVersion));
+            }
+        }
+
+        public string AgentVersion
+        {
+            get { return Client.DefaultRequestHeaders.UserAgent.First().Product.Version; }
+            set
+            {
+                var currentAgent = Client.DefaultRequestHeaders.UserAgent.First().Product.Name;
+                Client.DefaultRequestHeaders.UserAgent.Clear();
+                Client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(currentAgent, value));
+            }
         }
 
         private HttpRequestMessage CreateMessage(string uri, HttpMethod method,
@@ -53,7 +78,6 @@ namespace GHSprintTrax.GithubApi.EntityImplementations
             };
 
             message.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(Constants.apiMimeType));
-            message.Headers.UserAgent.Add(new ProductInfoHeaderValue("GetSprintStatus", "0.1"));
 
             return message;
         }
