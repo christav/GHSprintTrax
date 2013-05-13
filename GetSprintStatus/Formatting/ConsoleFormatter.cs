@@ -59,13 +59,20 @@ namespace GetSprintStatus.Formatting
 
         private void WriteSprintContents(ContentTableStats stats)
         {
+            float totalDev = 0;
+            float totalTest = 0;
+
             const string format = "{0,-16} {1,-4} {2,-4} {3,-6} {4}";
             output.WriteLine(format, "State", "Dev", "Test", "Number", "Title");
             output.WriteLine("------------------------------------------");
             foreach (var issue in stats.Issues)
             {
                 output.WriteLine(format, issue.State, issue.Dev, issue.Test, issue.Number, issue.Title.Clip(65));
+                totalDev += issue.Dev;
+                totalTest += issue.Test;
             }
+            output.WriteLine("------------------------------------------");
+            output.WriteLine("Total sprint story points: {0}", totalDev + totalTest);
         }
     }
 }
